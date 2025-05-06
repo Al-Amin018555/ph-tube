@@ -14,3 +14,11 @@ function getTime(time) {
 }
 
 console.log(getTime(4320));
+
+// const name = "tanvir";
+
+function namePass(name){
+    console.log(name)
+}
+
+namePass('tanvir');

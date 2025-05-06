@@ -18,6 +18,15 @@ const loadVideos = () => {
 
 }
 
+//load details of video
+const loadDetails = async(videoId) =>{
+
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
+};
+
 function getTime(time) {
     const hour = parseInt(time / 3600);
     let remainingSeconds = time % 3600;
@@ -25,26 +34,40 @@ function getTime(time) {
     remainingSeconds = remainingSeconds % 60;
     return `${hour} hours ${minutes} minutes ${remainingSeconds} seconds`;
 }
+function removeActiveClass(){
+    const buttons = document.getElementsByClassName('category-btn');
+    for(let btn of buttons){
+        btn.classList.remove('active');
+    }
+   
+}
 
 const displayCategoryVideo = (id) => {
+  
     fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then(res => res.json())
-    .then(data => displayVideos(data.category))
+    .then(data => {
+        removeActiveClass()
+        
+        const activeBtn = document.getElementById(`btn-${id}`);
+        activeBtn.classList.add('active');
+        displayVideos(data.category)
+    })
     .catch(err => console.log(err))
 
 };
 
 // create displayCategories
 const displayCategories = (categories) => {
+
     //add data in html
-    
     const categoriesContainer = document.getElementById('categories');
 
     categories.forEach(item => {
         //create a button
         const buttonContainer = document.createElement('div');
         buttonContainer.innerHTML = `
-            <button onclick="displayCategoryVideo(${item.category_id})" class="btn">
+            <button id="btn-${item.category_id}" onclick="displayCategoryVideo(${item.category_id})" class="btn category-btn">
                ${item.category}
             </button>
         `;
@@ -60,11 +83,11 @@ const displayVideos = (videos) => {
     const videosContainer = document.getElementById('videos');
     videosContainer.innerHTML = '';
     if(videos.length == 0){
-        videosContainer.classList.remove('grid');
+         videosContainer.classList.remove('grid');
         videosContainer.innerHTML = `
         <div class="min-h-[300px] flex flex-col gap-5 justify-center items-center">
             <img src="./assets/Icon.png"/>
-            <h2 class="text-2xl font-bold"> Oops!! Sorry, There is no content here </h2>
+            <h2 class="text-2xl font-bold text-center"> Oops!! Sorry, There is no content here </h2>
         </div>
         `; 
     }
@@ -72,7 +95,7 @@ const displayVideos = (videos) => {
         videosContainer.classList.add('grid');
     }
     videos.forEach(video => {
-
+        // console.log(video)
         const card = document.createElement('div');
         card.classList = "card bg-base-100";
         card.innerHTML = `
@@ -99,7 +122,7 @@ const displayVideos = (videos) => {
                         ${video.authors[0].verified === true ? `
                         <img class="h-5 w-5" src ="https://img.icons8.com/?size=48&id=SRJUuaAShjVD&format=png">`: ''}
                     </div>
-                    <p> </p>
+                    <p> <button onclick="loadDetails('${video.video_id}')" class="mt-2 btn btn-sm btn-error">Details</button> </p>
                 </div>
             </div>
          </div>
