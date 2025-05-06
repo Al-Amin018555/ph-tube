@@ -18,20 +18,31 @@ const loadVideos = () => {
 
 }
 
+const displayCategoryVideo = (id) => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then(res => res.json())
+    .then(data => displayVideos(data.category))
+    .catch(err => console.log(err))
+
+};
+
 // create displayCategories
 const displayCategories = (categories) => {
     //add data in html
-
-    const categoriesContainer = document.getElementById('categories-container');
+    
+    const categoriesContainer = document.getElementById('categories');
 
     categories.forEach(item => {
         //create a button
-        const button = document.createElement('button');
-        button.classList = "btn";
-        button.innerText = item.category;
+        const buttonContainer = document.createElement('div');
+        buttonContainer.innerHTML = `
+            <button onclick="displayCategoryVideo(${item.category_id})" class="btn">
+               ${item.category}
+            </button>
+        `;
 
         //adding button to category container
-        categoriesContainer.append(button);
+        categoriesContainer.append(buttonContainer);
     });
 };
 
@@ -56,8 +67,11 @@ const displayCategories = (categories) => {
 
 //display videos
 const displayVideos = (videos) => {
+   
     const videosContainer = document.getElementById('videos');
+    videosContainer.innerHTML = '';
     videos.forEach(video => {
+        console.log(video)
 
         const card = document.createElement('div');
         card.classList = "card bg-base-100";
@@ -66,7 +80,11 @@ const displayVideos = (videos) => {
                  <img class = "h-full w-full object-cover"
                   src="${video.thumbnail}"
                  alt="Shoes" />
-                 <span class="absolute right-2 bottom-2 bg-black rounded text-white"> ${video.others.posted_date} </span>
+                 ${
+                    video.others.posted_date?.length == 0 ? "" : `<span class="absolute right-2 bottom-2 bg-black rounded text-white"> ${video.others.posted_date} </span>`
+
+                 }
+                 
          </figure>
 
         <div class="px-0 py-3">
