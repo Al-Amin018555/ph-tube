@@ -24,7 +24,21 @@ const loadDetails = async(videoId) =>{
     const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data);
+    displayDetails(data.video);
+};
+
+const displayDetails = (video) => {
+    console.log(video);
+     const detailsContainer = document.getElementById('modal-content');
+     detailsContainer.innerHTML = `
+        <img src="${video.thumbnail}"/>
+        <p>${video.description}</p>
+     `;
+    // way-1 of adding modal
+    // document.getElementById('showModalData').click()
+
+    // way-2 here showModal() method is given by daisUI
+    document.getElementById('customModal').showModal()
 };
 
 function getTime(time) {
