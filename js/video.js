@@ -73,6 +73,7 @@ const displayCategoryVideo = (id) => {
 
 // create displayCategories
 const displayCategories = (categories) => {
+    
 
     //add data in html
     const categoriesContainer = document.getElementById('categories');
