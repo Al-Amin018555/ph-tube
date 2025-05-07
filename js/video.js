@@ -32,7 +32,7 @@ const displayDetails = (video) => {
      const detailsContainer = document.getElementById('modal-content');
      detailsContainer.innerHTML = `
         <img src="${video.thumbnail}"/>
-        <p>${video.description}</p>
+        <p class="mt-4">${video.description}</p>
      `;
     // way-1 of adding modal
     // document.getElementById('showModalData').click()
